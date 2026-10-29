@@ -30,15 +30,16 @@ def process_csv_file(filename: str,
     # to stop before 2nd row, which is row 1
     row_limit = start_row + chunk_size - 1
     row_limit_active: bool = chunk_size != 0
-    result = []
+    errors = []
     try:
         with open(filename, "r") as infile:
             for ri, row in enumerate(infile):
                 # There likely is a more efficient way of reaching start_row,
                 # e.g. using seek, but this would be at expense of readability
                 if ri >= start_row:
-                    errors = process_csv_row(row)
-                    if errors:
+                    row_errors = process_csv_row(row)
+                    if row_errors:
+                        errors.extend(row_errors)
                         print(f"Ending as error encountered - row: {ri}, errors: {errors}")
                         break
                 # End if row limit set and reached. Note file at the limit will
@@ -48,5 +49,5 @@ def process_csv_file(filename: str,
                     break
     except FileNotFoundError:
         ri = start_row
-        result.append(f"Migration file '{filename}' not found")
+        errors.append(f"Migration file '{filename}' not found")
     return start_row, ri, errors
