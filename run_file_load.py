@@ -12,7 +12,7 @@ def main():
     file_details_file = "file_details_example.csv"
     progress_file = "progress_log.txt"
     # Use 0 to indicate "unlimited"
-    chunk_size = 3
+    chunk_size = 0
 
     # Work out where to resume the load, based on previous state if it exists
     start_row = get_resumption_row(progress_file)
